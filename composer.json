@@ -1,8 +1,21 @@
 {
     "name": "fiachehr/laravel-comments-pro",
-    "description": "Advanced, framework-agnostic comment system for Laravel: nested threads, like/dislike reactions, guests + users, polymorphic to any model, Google reCAPTCHA, moderation, rate limiting.",
+    "description": "Production-ready comments system for Laravel: nested threads, reactions, guest & user support, polymorphic models, moderation, rate limiting, reCAPTCHA.",
     "type": "library",
     "license": "MIT",
+    "keywords": [
+        "laravel",
+        "comments",
+        "nested-comments",
+        "moderation",
+        "reactions",
+        "recaptcha"
+    ],
+    "homepage": "https://github.com/fiachehr/laravel-comments-pro",
+    "support": {
+        "issues": "https://github.com/fiachehr/laravel-comments-pro/issues",
+        "source": "https://github.com/fiachehr/laravel-comments-pro"
+    },
     "authors": [
         {
             "name": "Jafar Pourmojib (Fiachehr)",
@@ -10,12 +23,25 @@
         }
     ],
     "require": {
-        "php": ">=8.1",
-        "illuminate/support": "^10.0|^11.0"
+        "php": "^8.1",
+        "illuminate/support": "^10.0|^11.0",
+        "illuminate/database": "^10.0|^11.0",
+        "illuminate/events": "^10.0|^11.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0|^9.0",
+        "phpunit/phpunit": "^10.5|^11.0",
+        "larastan/larastan": "^2.9",
+        "laravel/pint": "^1.15"
     },
     "autoload": {
         "psr-4": {
             "Fiachehr\\Comments\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fiachehr\\Comments\\Tests\\": "tests/"
         }
     },
     "extra": {
@@ -26,13 +52,23 @@
             "aliases": {
                 "Comments": "Fiachehr\\Comments\\Facades\\Comments"
             }
+        },
+        "branch-alias": {
+            "dev-main": "0.2-dev"
         }
     },
-    "scripts": {
-        "post-autoload-dump": [
-            "@php artisan vendor:publish --provider=\"Fiachehr\\Comments\\CommentsServiceProvider\" --tag=\"comments-config\" --force"
-        ]
+    "config": {
+        "sort-packages": true
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    "scripts": {
+        "test": [
+            "@php vendor/bin/phpunit"
+        ],
+        "analyse": [
+            "@php vendor/bin/phpstan analyse"
+        ],
+        "format": [
+            "@php vendor/bin/pint"
+        ]
+    }
 }
