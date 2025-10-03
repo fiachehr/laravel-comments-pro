@@ -71,11 +71,6 @@ class PackageTest extends TestCase
         $this->assertTrue(class_exists(\Fiachehr\Comments\Rules\GuestFingerPrintRule::class));
     }
 
-    public function test_recaptcha_verifier_exists()
-    {
-        $this->assertTrue(class_exists(\Fiachehr\Comments\Services\RecaptchaVerifier::class));
-    }
-
     public function test_service_provider_exists()
     {
         $this->assertTrue(class_exists(\Fiachehr\Comments\CommentsServiceProvider::class));

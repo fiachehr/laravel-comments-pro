@@ -1,6 +1,6 @@
 {
     "name": "fiachehr/laravel-comments-pro",
-    "description": "Production-ready comments system for Laravel: nested threads, reactions, guest & user support, polymorphic models, moderation, rate limiting, reCAPTCHA.",
+    "description": "Production-ready comments system for Laravel: nested threads, reactions, guest & user support, polymorphic models, moderation, rate limiting",
     "type": "library",
     "license": "MIT",
     "keywords": [

@@ -3,21 +3,12 @@
 namespace Fiachehr\Comments;
 
 use Illuminate\Support\ServiceProvider;
-use Fiachehr\Comments\Services\RecaptchaVerifier;
 
 class CommentsServiceProvider extends ServiceProvider
 {
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/comments.php', 'comments');
-
-        $this->app->singleton('comments.recaptcha', function ($app) {
-            return new Services\RecaptchaVerifier(
-                config('comments.recaptcha.secret'),
-                config('comments.recaptcha.version'),
-                config('comments.recaptcha.score')
-            );
-        });
 
         $this->app->singleton('comments.service', function ($app) {
             return new Services\CommentsService();

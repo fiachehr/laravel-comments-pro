@@ -78,17 +78,6 @@ php artisan migrate
 php artisan vendor:publish --provider="Fiachehr\Comments\CommentsServiceProvider" --tag=comments-config
 ```
 
-### 4. (Optional) Publish Stubs
-
-```bash
-# Publish request stubs (recommended)
-php artisan vendor:publish --provider="Fiachehr\Comments\CommentsServiceProvider" --tag=comments-requests
-
-# Optional: Publish controller and route stubs
-php artisan vendor:publish --provider="Fiachehr\Comments\CommentsServiceProvider" --tag=comments-controllers
-php artisan vendor:publish --provider="Fiachehr\Comments\CommentsServiceProvider" --tag=comments-routes
-```
-
 ## 🚀 Quick Start
 
 ### 1. Add Trait to Any Model
@@ -195,13 +184,6 @@ return [
     'guests' => [
         'allowed' => true,
         'require_email' => true,
-    ],
-    
-    'recaptcha' => [
-        'enabled' => false,
-        'secret' => env('RECAPTCHA_SECRET'),
-        'version' => 'v3',
-        'score' => 0.5,
     ],
 ];
 ```
@@ -427,55 +409,6 @@ class CommentTest extends TestCase
         $this->assertEquals('like', $reaction->type);
     }
 }
-```
-
-## 📊 Database Schema
-
-### Comments Table
-
-```sql
-CREATE TABLE comments (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    commentable_type VARCHAR(255) NOT NULL,
-    commentable_id BIGINT UNSIGNED NOT NULL,
-    user_id BIGINT UNSIGNED NULL,
-    guest_name VARCHAR(255) NULL,
-    guest_email VARCHAR(255) NULL,
-    guest_ip VARCHAR(45) NULL,
-    body TEXT NOT NULL,
-    parent_id BIGINT UNSIGNED NULL,
-    status ENUM('pending', 'approved', 'spam') DEFAULT 'pending',
-    depth TINYINT UNSIGNED DEFAULT 0,
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-    deleted_at TIMESTAMP NULL,
-    
-    INDEX idx_commentable (commentable_type, commentable_id),
-    INDEX idx_user (user_id),
-    INDEX idx_parent (parent_id),
-    INDEX idx_status (status),
-    INDEX idx_depth (depth)
-);
-```
-
-### Reactions Table
-
-```sql
-CREATE TABLE reactions (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    comment_id BIGINT UNSIGNED NOT NULL,
-    user_id BIGINT UNSIGNED NULL,
-    guest_fingerprint VARCHAR(255) NULL,
-    type ENUM('like', 'dislike') NOT NULL,
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-    
-    UNIQUE KEY unique_user_reaction (comment_id, user_id),
-    UNIQUE KEY unique_guest_reaction (comment_id, guest_fingerprint),
-    INDEX idx_comment (comment_id),
-    INDEX idx_user (user_id),
-    INDEX idx_type (type)
-);
 ```
 
 ## 🔒 Security Features
