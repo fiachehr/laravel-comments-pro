@@ -178,7 +178,7 @@ $tree = Comments::toTree($comments);
 
 return [
     'max_depth' => 5,
-    'auto_approve_authenticated' => false,
+    'auto_approve_authenticated' => true,
     'reply_only_to_approved_parent' => true,
     
     'guests' => [
@@ -275,17 +275,22 @@ $stats = Reactions::getStats($comment);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCommentRequest;
-use Fiachehr\Comments\Facades\Comments;
-use Fiachehr\Comments\Facades\Reactions;
+use Fiachehr\Comments\Services\CommentsService;
+use Fiachehr\Comments\Services\ReactionService;
 use Fiachehr\Comments\Enums\ReactionType;
 use Illuminate\Database\Eloquent\Model;
 
 class CommentController extends Controller
 {
+    public function __construct(
+        private CommentsService $commentsService,
+        private ReactionService $reactionService
+    ) {}
+
     // Works with any model that uses HasComments trait
     public function store(StoreCommentRequest $request, Model $commentable)
     {
-        $comment = Comments::create($request->validated(), $commentable);
+        $comment = $this->commentsService->createComment($request->validated(), $commentable);
         
         return response()->json([
             'success' => true,
@@ -295,7 +300,7 @@ class CommentController extends Controller
     
     public function approve(Comment $comment)
     {
-        $approvedComment = Comments::approve($comment);
+        $approvedComment = $this->commentsService->approveComment($comment);
         
         return response()->json([
             'success' => true,
@@ -306,7 +311,7 @@ class CommentController extends Controller
     public function react(Comment $comment, string $type)
     {
         $reactionType = ReactionType::from($type);
-        $reaction = Reactions::toggle($comment, $reactionType);
+        $reaction = $this->reactionService->toggleReaction($comment, $reactionType);
         
         return response()->json([
             'success' => true,
@@ -318,7 +323,7 @@ class CommentController extends Controller
     public function tree(Model $commentable)
     {
         $comments = $commentable->comments()->approved()->get();
-        $tree = Comments::toTree($comments);
+        $tree = $this->commentsService->toTree($comments);
         
         return response()->json($tree);
     }
@@ -374,8 +379,8 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
-use Fiachehr\Comments\Facades\Comments;
-use Fiachehr\Comments\Facades\Reactions;
+use Fiachehr\Comments\Services\CommentsService;
+use Fiachehr\Comments\Services\ReactionService;
 use Fiachehr\Comments\Enums\ReactionType;
 
 class CommentTest extends TestCase
@@ -387,7 +392,8 @@ class CommentTest extends TestCase
         
         $this->actingAs($user);
         
-        $comment = Comments::create([
+        $commentsService = app(CommentsService::class);
+        $comment = $commentsService->createComment([
             'body' => 'Test comment',
         ], $post);
         
@@ -399,11 +405,14 @@ class CommentTest extends TestCase
     {
         $user = User::factory()->create();
         $post = Post::factory()->create();
-        $comment = Comments::create(['body' => 'Test'], $post);
+        
+        $commentsService = app(CommentsService::class);
+        $comment = $commentsService->createComment(['body' => 'Test'], $post);
         
         $this->actingAs($user);
         
-        $reaction = Reactions::toggle($comment, ReactionType::LIKE);
+        $reactionService = app(ReactionService::class);
+        $reaction = $reactionService->toggleReaction($comment, ReactionType::LIKE);
         
         $this->assertInstanceOf(Reaction::class, $reaction);
         $this->assertEquals('like', $reaction->type);
@@ -538,7 +547,7 @@ $popularComments = Cache::remember('popular_comments', 3600, function () {
 
 // Cache comment trees
 $commentTree = Cache::remember("comments_tree_{$post->id}", 1800, function () use ($post) {
-    return Comments::toTree($post->comments()->approved()->get());
+    return app(CommentsService::class)->toTree($post->comments()->approved()->get());
 });
 ```
 
