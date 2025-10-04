@@ -424,7 +424,7 @@ class CommentTest extends TestCase
 
 - **CSRF Protection** - Built-in CSRF token validation
 - **Rate Limiting** - Configurable rate limits for comments
-- **Spam Protection** - Optional reCAPTCHA integration
+- **Spam Protection** - Built-in spam detection
 - **Guest Fingerprinting** - Secure guest user tracking
 - **Input Validation** - Comprehensive validation rules
 - **SQL Injection Protection** - Eloquent ORM protection

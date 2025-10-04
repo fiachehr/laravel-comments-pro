@@ -8,8 +8,7 @@
         "comments",
         "nested-comments",
         "moderation",
-        "reactions",
-        "recaptcha"
+        "reactions"
     ],
     "homepage": "https://github.com/fiachehr/laravel-comments-pro",
     "support": {

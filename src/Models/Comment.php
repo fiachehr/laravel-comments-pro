@@ -4,7 +4,8 @@ namespace Fiachehr\Comments\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-// User model will be resolved dynamically
+use Fiachehr\Comments\Database\Factories\CommentFactory;
+use Fiachehr\Comments\Models\Reaction;
 
 class Comment extends Model
 {
@@ -12,7 +13,7 @@ class Comment extends Model
 
     protected static function newFactory()
     {
-        return \Database\Factories\CommentFactory::new();
+        return CommentFactory::new();
     }
 
     protected $fillable = [
