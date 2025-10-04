@@ -2,8 +2,8 @@
 
 namespace Fiachehr\Comments\Database\Factories;
 
-use Fiachehr\Comments\Models\Comment;
 use Fiachehr\Comments\Enums\CommentStatusType;
+use Fiachehr\Comments\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -44,7 +44,7 @@ class CommentFactory extends Factory
      */
     public function approved(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'status' => CommentStatusType::APPROVED->value,
         ]);
     }
@@ -54,7 +54,7 @@ class CommentFactory extends Factory
      */
     public function pending(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'status' => CommentStatusType::PENDING->value,
         ]);
     }
@@ -64,7 +64,7 @@ class CommentFactory extends Factory
      */
     public function spam(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'status' => CommentStatusType::SPAM->value,
         ]);
     }
@@ -74,7 +74,7 @@ class CommentFactory extends Factory
      */
     public function guest(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'user_id' => null,
             'guest_name' => $this->faker->name(),
             'guest_email' => $this->faker->safeEmail(),
@@ -87,7 +87,7 @@ class CommentFactory extends Factory
      */
     public function reply(int $parentId, int $depth = 1): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'parent_id' => $parentId,
             'depth' => $depth,
         ]);

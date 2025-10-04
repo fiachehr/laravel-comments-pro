@@ -33,6 +33,7 @@ class GuestFingerprint
 
         $fingerprint = self::generate();
         Cookie::queue($cookieName, $fingerprint, 60 * 24 * 365);
+
         return $fingerprint;
     }
 

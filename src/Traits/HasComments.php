@@ -4,14 +4,13 @@ namespace Fiachehr\Comments\Traits;
 
 use Fiachehr\Comments\Models\Comment;
 use Fiachehr\Comments\Models\Reaction;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 trait HasComments
 {
-
     public function commentable(): MorphTo
     {
         return $this->morphTo('commentable');

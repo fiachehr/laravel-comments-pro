@@ -24,6 +24,6 @@ enum CommentStatusType: string
 
     public static function toArray(): array
     {
-        return array_combine(array_map(fn(self $status) => $status->value, self::all()), array_map(fn(self $status) => $status->label(), self::all()));
+        return array_combine(array_map(fn (self $status) => $status->value, self::all()), array_map(fn (self $status) => $status->label(), self::all()));
     }
 }

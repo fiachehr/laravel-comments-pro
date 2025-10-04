@@ -8,14 +8,14 @@ class CommentsServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/comments.php', 'comments');
+        $this->mergeConfigFrom(__DIR__.'/../config/comments.php', 'comments');
 
         $this->app->singleton('comments.service', function ($app) {
-            return new Services\CommentsService();
+            return new Services\CommentsService;
         });
 
         $this->app->singleton('comments.reactions.service', function ($app) {
-            return new Services\ReactionService();
+            return new Services\ReactionService;
         });
     }
 
@@ -23,30 +23,30 @@ class CommentsServiceProvider extends ServiceProvider
     {
         // Migrations
         $this->publishes([
-            __DIR__ . '/../database/migrations/' => database_path('migrations'),
+            __DIR__.'/../database/migrations/' => database_path('migrations'),
         ], 'comments-migrations');
 
         // Config
         $this->publishes([
-            __DIR__ . '/../config/comments.php' => config_path('comments.php'),
+            __DIR__.'/../config/comments.php' => config_path('comments.php'),
         ], 'comments-config');
 
         // Optional stubs for controllers, requests and routes (if they exist)
-        if (is_dir(__DIR__ . '/../stubs/Controllers/')) {
+        if (is_dir(__DIR__.'/../stubs/Controllers/')) {
             $this->publishes([
-                __DIR__ . '/../stubs/Controllers/' => app_path('Http/Controllers'),
+                __DIR__.'/../stubs/Controllers/' => app_path('Http/Controllers'),
             ], 'comments-controllers');
         }
 
-        if (is_dir(__DIR__ . '/../stubs/routes/')) {
+        if (is_dir(__DIR__.'/../stubs/routes/')) {
             $this->publishes([
-                __DIR__ . '/../stubs/routes/' => base_path('routes'),
+                __DIR__.'/../stubs/routes/' => base_path('routes'),
             ], 'comments-routes');
         }
 
         // Always publish requests
         $this->publishes([
-            __DIR__ . '/../stubs/Requests/' => app_path('Http/Requests'),
+            __DIR__.'/../stubs/Requests/' => app_path('Http/Requests'),
         ], 'comments-requests');
     }
 }

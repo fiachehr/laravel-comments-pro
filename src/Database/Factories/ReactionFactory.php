@@ -2,8 +2,8 @@
 
 namespace Fiachehr\Comments\Database\Factories;
 
-use Fiachehr\Comments\Models\Reaction;
 use Fiachehr\Comments\Enums\ReactionType;
+use Fiachehr\Comments\Models\Reaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -40,7 +40,7 @@ class ReactionFactory extends Factory
      */
     public function like(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => ReactionType::LIKE->value,
         ]);
     }
@@ -50,7 +50,7 @@ class ReactionFactory extends Factory
      */
     public function dislike(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => ReactionType::DISLIKE->value,
         ]);
     }
@@ -60,7 +60,7 @@ class ReactionFactory extends Factory
      */
     public function guest(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'user_id' => null,
             'guest_fingerprint' => $this->faker->uuid(),
         ]);

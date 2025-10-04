@@ -2,9 +2,9 @@
 
 namespace Fiachehr\Comments\Services;
 
-use Fiachehr\Comments\Helper\GuestFingerprint;
 use Fiachehr\Comments\Enums\ReactionType;
 use Fiachehr\Comments\Events\ReactionToggled;
+use Fiachehr\Comments\Helper\GuestFingerprint;
 use Fiachehr\Comments\Models\Comment;
 use Fiachehr\Comments\Models\Reaction;
 use Illuminate\Support\Collection;
@@ -20,15 +20,15 @@ class ReactionService
             throw ValidationException::withMessages(['comment' => 'Cannot react to unapproved comment.']);
         }
 
-        if (!$userId && !$guestFingerprint && config('comments.guests.allowed')) {
+        if (! $userId && ! $guestFingerprint && config('comments.guests.allowed')) {
             $guestFingerprint = GuestFingerprint::getOrCreate();
         }
 
-        if (!$userId && $guestFingerprint && !GuestFingerprint::validate($guestFingerprint)) {
+        if (! $userId && $guestFingerprint && ! GuestFingerprint::validate($guestFingerprint)) {
             throw ValidationException::withMessages(['fingerprint' => 'Invalid guest fingerprint format.']);
         }
 
-        if (!$userId && !$guestFingerprint) {
+        if (! $userId && ! $guestFingerprint) {
             throw ValidationException::withMessages(['user' => 'User must be authenticated or provide guest fingerprint.']);
         }
 
@@ -42,23 +42,25 @@ class ReactionService
             $existingReaction->update(['type' => $type->value]);
             $existingReaction->refresh();
             event(new ReactionToggled($existingReaction));
+
             return $existingReaction;
         }
 
         $reaction = $comment->reactions()->create([
-            'user_id'           => $userId,
+            'user_id' => $userId,
             'guest_fingerprint' => $guestFingerprint,
-            'type'              => $type->value,
+            'type' => $type->value,
         ]);
 
         event(new ReactionToggled($reaction));
+
         return $reaction;
     }
-
 
     public function removeReaction(Reaction $reaction): Reaction
     {
         $reaction->delete();
+
         return $reaction;
     }
 
@@ -108,7 +110,7 @@ class ReactionService
         $userId = Auth::id();
         $reaction = $this->findExistingReaction($comment, $userId, $guestFingerprint);
 
-        if (!$reaction) {
+        if (! $reaction) {
             return null;
         }
 

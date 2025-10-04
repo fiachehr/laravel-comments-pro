@@ -2,8 +2,8 @@
 
 namespace Fiachehr\Comments\Rules;
 
-use Fiachehr\Comments\Helper\GuestFingerprint;
 use Closure;
+use Fiachehr\Comments\Helper\GuestFingerprint;
 use Illuminate\Contracts\Validation\ValidationRule;
 
 class GuestFingerPrintRule implements ValidationRule
@@ -14,7 +14,7 @@ class GuestFingerPrintRule implements ValidationRule
             return;
         }
 
-        if (!GuestFingerprint::validate($value)) {
+        if (! GuestFingerprint::validate($value)) {
             $fail('The :attribute must be a valid guest fingerprint.');
         }
     }

@@ -31,8 +31,8 @@ enum ReactionType: string
     public static function toArray(): array
     {
         return array_combine(
-            array_map(fn(self $type) => $type->value, self::all()),
-            array_map(fn(self $type) => $type->label(), self::all())
+            array_map(fn (self $type) => $type->value, self::all()),
+            array_map(fn (self $type) => $type->label(), self::all())
         );
     }
 }

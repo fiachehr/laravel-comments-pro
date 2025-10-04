@@ -2,17 +2,17 @@
 
 namespace Fiachehr\Comments\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Fiachehr\Comments\Models\Comment;
-use Fiachehr\Comments\Models\Reaction;
-use Fiachehr\Comments\Services\CommentsService;
-use Fiachehr\Comments\Services\ReactionService;
 use Fiachehr\Comments\Enums\CommentStatusType;
 use Fiachehr\Comments\Enums\ReactionType;
-use Fiachehr\Comments\Helper\GuestFingerprint;
-use Fiachehr\Comments\Rules\GuestFingerPrintRule;
 use Fiachehr\Comments\Events\CommentCreated;
 use Fiachehr\Comments\Events\ReactionToggled;
+use Fiachehr\Comments\Helper\GuestFingerprint;
+use Fiachehr\Comments\Models\Comment;
+use Fiachehr\Comments\Models\Reaction;
+use Fiachehr\Comments\Rules\GuestFingerPrintRule;
+use Fiachehr\Comments\Services\CommentsService;
+use Fiachehr\Comments\Services\ReactionService;
+use PHPUnit\Framework\TestCase;
 
 class FunctionalTest extends TestCase
 {
@@ -31,7 +31,7 @@ class FunctionalTest extends TestCase
 
     public function test_comment_model_fillable_attributes()
     {
-        $comment = new Comment();
+        $comment = new Comment;
         $fillable = $comment->getFillable();
 
         $expectedFillable = [
@@ -44,7 +44,7 @@ class FunctionalTest extends TestCase
             'body',
             'parent_id',
             'status',
-            'depth'
+            'depth',
         ];
 
         $this->assertEquals($expectedFillable, $fillable);
@@ -52,14 +52,14 @@ class FunctionalTest extends TestCase
 
     public function test_reaction_model_fillable_attributes()
     {
-        $reaction = new Reaction();
+        $reaction = new Reaction;
         $fillable = $reaction->getFillable();
 
         $expectedFillable = [
             'comment_id',
             'user_id',
             'guest_fingerprint',
-            'type'
+            'type',
         ];
 
         $this->assertEquals($expectedFillable, $fillable);
@@ -67,7 +67,7 @@ class FunctionalTest extends TestCase
 
     public function test_comment_model_casts()
     {
-        $comment = new Comment();
+        $comment = new Comment;
         $casts = $comment->getCasts();
 
         $this->assertArrayHasKey('depth', $casts);
@@ -76,7 +76,7 @@ class FunctionalTest extends TestCase
 
     public function test_reaction_model_casts()
     {
-        $reaction = new Reaction();
+        $reaction = new Reaction;
         $casts = $reaction->getCasts();
 
         $this->assertArrayHasKey('type', $casts);
@@ -98,7 +98,7 @@ class FunctionalTest extends TestCase
 
     public function test_comment_created_event_has_correct_properties()
     {
-        $comment = new Comment();
+        $comment = new Comment;
         $event = new CommentCreated($comment);
 
         $this->assertInstanceOf(CommentCreated::class, $event);
@@ -107,7 +107,7 @@ class FunctionalTest extends TestCase
 
     public function test_reaction_toggled_event_has_correct_properties()
     {
-        $reaction = new Reaction();
+        $reaction = new Reaction;
         $event = new ReactionToggled($reaction);
 
         $this->assertInstanceOf(ReactionToggled::class, $event);
@@ -116,7 +116,7 @@ class FunctionalTest extends TestCase
 
     public function test_comments_service_has_required_methods()
     {
-        $service = new CommentsService();
+        $service = new CommentsService;
 
         $this->assertTrue(method_exists($service, 'createComment'));
         $this->assertTrue(method_exists($service, 'approveComment'));
@@ -124,7 +124,7 @@ class FunctionalTest extends TestCase
 
     public function test_reaction_service_has_required_methods()
     {
-        $service = new ReactionService();
+        $service = new ReactionService;
 
         $this->assertTrue(method_exists($service, 'toggleReaction'));
     }
@@ -140,7 +140,7 @@ class FunctionalTest extends TestCase
     private function validateWithRule($rule, $value)
     {
         $errors = [];
-        $rule->validate('test_attribute', $value, function($message) use (&$errors) {
+        $rule->validate('test_attribute', $value, function ($message) use (&$errors) {
             $errors[] = $message;
         });
 

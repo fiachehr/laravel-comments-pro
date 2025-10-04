@@ -60,23 +60,8 @@
         "sort-packages": true
     },
     "scripts": {
-        "test": [
-            "@php vendor/bin/phpunit"
-        ],
-        "test:unit": [
-            "@php vendor/bin/phpunit tests/Unit/"
-        ],
-        "test:core": [
-            "@php vendor/bin/phpunit tests/Unit/CoreFunctionalityTest.php"
-        ],
-        "test:functional": [
-            "@php vendor/bin/phpunit tests/Unit/FunctionalTest.php"
-        ],
-        "test:package": [
-            "@php vendor/bin/phpunit tests/Unit/PackageTest.php"
-        ],
         "analyse": [
-            "@php vendor/bin/phpstan analyse"
+            "@php vendor/bin/phpstan analyse src"
         ],
         "format": [
             "@php vendor/bin/pint"

@@ -2,10 +2,9 @@
 
 namespace Fiachehr\Comments\Models;
 
+use Fiachehr\Comments\Database\Factories\CommentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Fiachehr\Comments\Database\Factories\CommentFactory;
-use Fiachehr\Comments\Models\Reaction;
 
 class Comment extends Model
 {
@@ -26,7 +25,7 @@ class Comment extends Model
         'body',
         'parent_id',
         'status',
-        'depth'
+        'depth',
     ];
 
     protected $casts = [
@@ -66,8 +65,8 @@ class Comment extends Model
     public function scopeWithReactions($query)
     {
         $query->with('reactions')->withCount([
-            'reactions as likes' => fn($q) => $q->where('type', 'like'),
-            'reactions as dislikes' => fn($q) => $q->where('type', 'dislike'),
+            'reactions as likes' => fn ($q) => $q->where('type', 'like'),
+            'reactions as dislikes' => fn ($q) => $q->where('type', 'dislike'),
         ]);
 
         return $query;

@@ -2,37 +2,37 @@
 
 namespace Fiachehr\Comments\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Fiachehr\Comments\Models\Comment;
-use Fiachehr\Comments\Models\Reaction;
 use Fiachehr\Comments\Enums\CommentStatusType;
 use Fiachehr\Comments\Enums\ReactionType;
 use Fiachehr\Comments\Helper\GuestFingerprint;
+use Fiachehr\Comments\Models\Comment;
+use Fiachehr\Comments\Models\Reaction;
+use PHPUnit\Framework\TestCase;
 
 class CoreFunctionalityTest extends TestCase
 {
     public function test_comment_model_can_be_instantiated()
     {
-        $comment = new Comment();
+        $comment = new Comment;
         $this->assertInstanceOf(Comment::class, $comment);
     }
 
     public function test_reaction_model_can_be_instantiated()
     {
-        $reaction = new Reaction();
+        $reaction = new Reaction;
         $this->assertInstanceOf(Reaction::class, $reaction);
     }
 
     public function test_comment_can_be_filled_with_data()
     {
-        $comment = new Comment();
+        $comment = new Comment;
         $data = [
             'commentable_type' => 'App\\Models\\Post',
             'commentable_id' => 1,
             'user_id' => 1,
             'body' => 'This is a test comment',
             'status' => CommentStatusType::PENDING->value,
-            'depth' => 0
+            'depth' => 0,
         ];
 
         $comment->fill($data);
@@ -47,7 +47,7 @@ class CoreFunctionalityTest extends TestCase
 
     public function test_comment_can_be_filled_with_guest_data()
     {
-        $comment = new Comment();
+        $comment = new Comment;
         $data = [
             'commentable_type' => 'App\\Models\\Post',
             'commentable_id' => 1,
@@ -56,7 +56,7 @@ class CoreFunctionalityTest extends TestCase
             'guest_ip' => '127.0.0.1',
             'body' => 'This is a guest comment',
             'status' => CommentStatusType::PENDING->value,
-            'depth' => 0
+            'depth' => 0,
         ];
 
         $comment->fill($data);
@@ -70,7 +70,7 @@ class CoreFunctionalityTest extends TestCase
 
     public function test_comment_status_can_be_changed()
     {
-        $comment = new Comment();
+        $comment = new Comment;
         $comment->status = CommentStatusType::PENDING->value;
         $this->assertEquals(CommentStatusType::PENDING->value, $comment->status);
 
@@ -83,17 +83,17 @@ class CoreFunctionalityTest extends TestCase
 
     public function test_nested_comment_can_be_created()
     {
-        $parent = new Comment();
+        $parent = new Comment;
         $parent->fill([
             'commentable_type' => 'App\\Models\\Post',
             'commentable_id' => 1,
             'user_id' => 1,
             'body' => 'Parent comment',
             'status' => CommentStatusType::APPROVED->value,
-            'depth' => 0
+            'depth' => 0,
         ]);
 
-        $child = new Comment();
+        $child = new Comment;
         $child->fill([
             'commentable_type' => 'App\\Models\\Post',
             'commentable_id' => 1,
@@ -101,7 +101,7 @@ class CoreFunctionalityTest extends TestCase
             'body' => 'Child comment',
             'parent_id' => $parent->id,
             'status' => CommentStatusType::APPROVED->value,
-            'depth' => 1
+            'depth' => 1,
         ]);
 
         $this->assertEquals($parent->id, $child->parent_id);
@@ -110,11 +110,11 @@ class CoreFunctionalityTest extends TestCase
 
     public function test_reaction_can_be_created_with_user()
     {
-        $reaction = new Reaction();
+        $reaction = new Reaction;
         $reaction->fill([
             'comment_id' => 1,
             'user_id' => 1,
-            'type' => ReactionType::LIKE->value
+            'type' => ReactionType::LIKE->value,
         ]);
 
         $this->assertEquals(1, $reaction->comment_id);
@@ -125,11 +125,11 @@ class CoreFunctionalityTest extends TestCase
 
     public function test_reaction_can_be_created_with_guest()
     {
-        $reaction = new Reaction();
+        $reaction = new Reaction;
         $reaction->fill([
             'comment_id' => 1,
             'guest_fingerprint' => 'test_fingerprint_123',
-            'type' => ReactionType::DISLIKE->value
+            'type' => ReactionType::DISLIKE->value,
         ]);
 
         $this->assertEquals(1, $reaction->comment_id);
@@ -140,7 +140,7 @@ class CoreFunctionalityTest extends TestCase
 
     public function test_reaction_type_can_be_changed()
     {
-        $reaction = new Reaction();
+        $reaction = new Reaction;
         $reaction->type = ReactionType::LIKE->value;
         $this->assertEquals(ReactionType::LIKE, $reaction->type);
 
@@ -177,7 +177,7 @@ class CoreFunctionalityTest extends TestCase
 
     public function test_comment_fillable_attributes()
     {
-        $comment = new Comment();
+        $comment = new Comment;
         $fillable = $comment->getFillable();
 
         $expectedFillable = [
@@ -190,7 +190,7 @@ class CoreFunctionalityTest extends TestCase
             'body',
             'parent_id',
             'status',
-            'depth'
+            'depth',
         ];
 
         $this->assertEquals($expectedFillable, $fillable);
@@ -198,14 +198,14 @@ class CoreFunctionalityTest extends TestCase
 
     public function test_reaction_fillable_attributes()
     {
-        $reaction = new Reaction();
+        $reaction = new Reaction;
         $fillable = $reaction->getFillable();
 
         $expectedFillable = [
             'comment_id',
             'user_id',
             'guest_fingerprint',
-            'type'
+            'type',
         ];
 
         $this->assertEquals($expectedFillable, $fillable);
@@ -213,7 +213,7 @@ class CoreFunctionalityTest extends TestCase
 
     public function test_comment_casts()
     {
-        $comment = new Comment();
+        $comment = new Comment;
         $casts = $comment->getCasts();
 
         $this->assertArrayHasKey('depth', $casts);
@@ -222,7 +222,7 @@ class CoreFunctionalityTest extends TestCase
 
     public function test_reaction_casts()
     {
-        $reaction = new Reaction();
+        $reaction = new Reaction;
         $casts = $reaction->getCasts();
 
         $this->assertArrayHasKey('type', $casts);
