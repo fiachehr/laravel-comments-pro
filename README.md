@@ -2,6 +2,10 @@
 
 A comprehensive, feature-rich comments system for Laravel applications with support for nested comments, reactions, guest users, and advanced moderation features.
 
+## 📖 Documentation (fiachehr.ir)
+
+Full guide with examples and IDE-style code blocks: **[Laravel Comments Pro — Documentation](https://fiachehr.ir/docs/laravel-comments-pro.html)**
+
 ## 📋 Requirements
 
 ### PHP Version
@@ -9,17 +13,20 @@ A comprehensive, feature-rich comments system for Laravel applications with supp
 - **PHP 8.1, 8.2, 8.3, 8.4** (Supported)
 
 ### Laravel Version
-- **Laravel 10.x** (LTS - Long Term Support)
-- **Laravel 11.x** (Latest)
+- **Laravel 10.x** (LTS)
+- **Laravel 11.x**
+- **Laravel 12.x**
 
 ### Compatibility Matrix
 
-| PHP Version | Laravel 10.x | Laravel 11.x |
-| ----------- | ------------ | ------------ |
-| 8.1         | ✅ Supported  | ✅ Supported  |
-| 8.2         | ✅ Supported  | ✅ Supported  |
-| 8.3         | ✅ Supported  | ✅ Supported  |
-| 8.4         | ✅ Supported  | ✅ Supported  |
+| PHP Version | Laravel 10.x | Laravel 11.x | Laravel 12.x |
+| ----------- | ------------ | ------------ | ------------ |
+| 8.1         | ✅ Supported  | —            | —            |
+| 8.2         | ✅ Supported  | ✅ Supported  | ✅ Supported  |
+| 8.3         | ✅ Supported  | ✅ Supported  | ✅ Supported  |
+| 8.4         | ✅ Supported  | ✅ Supported  | ✅ Supported  |
+
+Laravel 11 and 12 require PHP 8.2 or higher. Use PHP 8.1 only with Laravel 10.
 
 ### Framework Dependency
 
@@ -53,8 +60,8 @@ A comprehensive, feature-rich comments system for Laravel applications with supp
 ### Prerequisites
 
 Before installing, ensure you have:
-- **PHP >= 8.1**
-- **Laravel >= 10.0**
+- **PHP >= 8.1** (PHP **8.2+** for Laravel 11 or 12)
+- **Laravel 10, 11, or 12**
 - **Composer** installed
 
 ### 1. Install via Composer
@@ -174,39 +181,24 @@ $tree = Comments::toTree($comments);
 ### Comments Configuration
 
 ```php
-// config/comments.php
+// config/comments.php (after publishing)
 
 return [
+    'route_prefix' => 'api/comments',
+    'middleware' => ['api', 'throttle:60,1'],
     'max_depth' => 5,
     'auto_approve_authenticated' => true,
     'reply_only_to_approved_parent' => true,
-    
+
     'guests' => [
         'allowed' => true,
         'require_email' => true,
+        'cookie_name' => 'guest_fingerprint',
     ],
 ];
 ```
 
-### Model Configuration
-
-```php
-// In your model that uses HasComments trait
-
-class Post extends Model
-{
-    use HasComments;
-    
-    // Optional: Override default comment settings
-    public function getCommentSettings(): array
-    {
-        return [
-            'max_depth' => 3,
-            'auto_approve' => true,
-        ];
-    }
-}
-```
+Per-model settings are not defined on the trait; adjust behavior in `config/comments.php` (or override config per environment).
 
 ## 🔧 Advanced Usage
 
@@ -248,8 +240,11 @@ $approvedComments = $post->comments()->approved()->get();
 // Get comments with reactions
 $commentsWithReactions = $post->comments()->withReactions()->get();
 
-// Get popular comments
+// Get popular comments (service)
 $popularComments = app(ReactionService::class)->getPopularComments(10, '7 days');
+
+// Or via facade
+$popularComments = Reactions::getPopular(10, '7 days');
 ```
 
 ### Bulk Operations
@@ -535,7 +530,7 @@ $comments = $post->comments()
    php artisan --version
    
    # Ensure minimum requirements are met
-   # PHP >= 8.1, Laravel >= 10.0
+   # PHP >= 8.1 (8.2+ for Laravel 11/12), Laravel 10–12
    ```
 
 2. **Migration Errors**
@@ -566,7 +561,7 @@ $comments = $post->comments()
    ```php
    // This package only works with Laravel
    // Not compatible with: Symfony, CodeIgniter, etc.
-   // Requires: Laravel 10+ with PHP 8.1+
+   // Requires: Laravel 10–12 (PHP 8.2+ for Laravel 11/12)
    ```
 
 ### Debug Mode
